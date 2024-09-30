@@ -1,0 +1,65 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: inmobiliaria-test # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: dotnet6
+  stage: test
+  region: eu-central-1
+  tags:
+    Env: "${self:provider.stage}"
+    Proyecto: "Inmobiliaria"
+  environment:
+    SECRET_CONNECTIONSTRINGS: "Server=localhost;Database=BD_INMUEBLES;User ID=sa;Password=1234;Trusted_Connection=False;"
+
+package:
+  individually: true
+
+functions:
+  GenerateToken:
+    handler: AwsDotnetCsharp::AwsDotnetCsharp.Handler::GenerateToken
+    package:
+      artifact: bin/release/net6.0/hello.zip
+    timeout: 30
+    events:
+      - http:
+          path: token
+          method: get
+  ListarInmuebles:
+    handler: AwsDotnetCsharp::AwsDotnetCsharp.Handler::ListarInmuebles
+    package:
+      artifact: bin/release/net6.0/hello.zip
+    events:
+      - http:
+          path: listinmueble
+          method: get
+  MantInmuebles:
+    handler: AwsDotnetCsharp::AwsDotnetCsharp.Handler::MantInmuebles
+    package:
+      artifact: bin/release/net6.0/hello.zip
+    timeout: 30
+    events:
+      - http:
+          path: mantinmuebles
+          method: get
+  ListTipoInmueble:
+    handler: AwsDotnetCsharp::AwsDotnetCsharp.Handler::ListTipoInmueble
+    package:
+      artifact: bin/release/net6.0/hello.zip
+    timeout: 30
+    events:
+      - http:
+          path: listtipoinmuebles
+          method: get
